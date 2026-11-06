@@ -1,0 +1,13 @@
+{
+  "name": "takeapart-local",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Local reconstruction of https://www.takeapart.app/",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "@mediapipe/tasks-vision": "1.0.1"
+  }
+}

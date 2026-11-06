@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <title>AI Vision</title>
+  <meta name="description" content="Gesture-controlled 3D landmarks, engines and cars made of glowing GPU particles.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%235e5ce6'/%3E%3Cstop offset='1' stop-color='%230a84ff'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='15' fill='url(%23g)'/%3E%3Ccircle cx='32' cy='32' r='15' fill='none' stroke='white' stroke-width='3.5' opacity='.9'/%3E%3Ccircle cx='32' cy='32' r='6' fill='white'/%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- SF Symbols-style icon sprite -->
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="i-cam" viewBox="0 0 24 24"><path d="M3 8.5A2.5 2.5 0 0 1 5.5 6H7l1.6-2h6.8L17 6h1.5A2.5 2.5 0 0 1 21 8.5v8a2.5 2.5 0 0 1-2.5 2.5h-13A2.5 2.5 0 0 1 3 16.5z"/><circle cx="12" cy="12.5" r="3.5"/></symbol>
+      <symbol id="i-play" viewBox="0 0 24 24"><path d="M7.5 5.2v13.6a.8.8 0 0 0 1.2.7l10.6-6.8a.8.8 0 0 0 0-1.4L8.7 4.5a.8.8 0 0 0-1.2.7z" fill="currentColor"/></symbol>
+      <symbol id="i-tag" viewBox="0 0 24 24"><path d="M3.5 11.4V5A1.5 1.5 0 0 1 5 3.5h6.4a1.5 1.5 0 0 1 1 .44l8.2 8.2a1.5 1.5 0 0 1 0 2.12l-6.4 6.4a1.5 1.5 0 0 1-2.12 0l-8.2-8.2a1.5 1.5 0 0 1-.44-1.06z"/><circle cx="8" cy="8" r="1.4" fill="currentColor"/></symbol>
+      <symbol id="i-rotate" viewBox="0 0 24 24"><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3"/><path d="M19.5 4v4.5H15"/></symbol>
+      <symbol id="i-hand" viewBox="0 0 24 24"><path d="M8 13.5V6a1.5 1.5 0 0 1 3 0v5m0-6.5a1.5 1.5 0 0 1 3 0V11m0-5a1.5 1.5 0 0 1 3 0v6m0-3a1.5 1.5 0 0 1 3 0v5.5a6.5 6.5 0 0 1-6.5 6.5h-.9a6.5 6.5 0 0 1-5-2.35L4.5 15.6a1.6 1.6 0 0 1 2.4-2.1L8 14.6"/></symbol>
+      <symbol id="i-cut" viewBox="0 0 24 24"><circle cx="6" cy="6.5" r="2.8"/><circle cx="6" cy="17.5" r="2.8"/><path d="M8.3 8.2 20 19.5M8.3 15.8 20 4.5"/></symbol>
+      <symbol id="i-quiz" viewBox="0 0 24 24"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11v4.6c0 1.5 2.5 3.4 5.5 3.4s5.5-1.9 5.5-3.4V11"/><path d="M21.5 9v5.5"/></symbol>
+      <symbol id="i-mic" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11.5" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3"/></symbol>
+      <symbol id="i-rec" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.2" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-help" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.6a2.5 2.5 0 1 1 3.5 2.3c-.65.3-1.1.95-1.1 1.65v.45"/><circle cx="12" cy="16.9" r=".9" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-x" viewBox="0 0 24 24"><path d="M7 7l10 10M17 7 7 17"/></symbol>
+      <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></symbol>
+      <symbol id="i-speaker" viewBox="0 0 24 24"><path d="M4 9.5h3l4.5-4v13l-4.5-4H4z"/><path d="M15.5 9.2a4 4 0 0 1 0 5.6M18 6.7a7.5 7.5 0 0 1 0 10.6"/></symbol>
+      <symbol id="i-pull" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></symbol>
+      <symbol id="i-snap" viewBox="0 0 24 24"><path d="M12 3.5l1.7 4.8 4.8 1.7-4.8 1.7L12 16.5l-1.7-4.8L5.5 10l4.8-1.7z"/><path d="M18.5 15l.7 1.8 1.8.7-1.8.7-.7 1.8-.7-1.8-1.8-.7 1.8-.7z"/></symbol>
+      <symbol id="i-form" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3.2" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-burst" viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.2" fill="currentColor" stroke="none"/><path d="M12 3v3.5M12 17.5V21M3 12h3.5M17.5 12H21M5.6 5.6l2.5 2.5M15.9 15.9l2.5 2.5M5.6 18.4l2.5-2.5M15.9 8.1l2.5-2.5"/></symbol>
+      <symbol id="i-next" viewBox="0 0 24 24"><path d="M4.5 6.6v10.8a.6.6 0 0 0 .95.5L13 12.5a.6.6 0 0 0 0-1L5.45 6.1a.6.6 0 0 0-.95.5zM12.5 6.6v10.8a.6.6 0 0 0 .95.5L21 12.5a.6.6 0 0 0 0-1l-7.55-5.4a.6.6 0 0 0-.95.5z" fill="currentColor" stroke="none"/></symbol>
+      <symbol id="i-chev" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6"/></symbol>
+    </defs>
+  </svg>
+
+  <canvas id="gl" aria-label="Particle scene"></canvas>
+  <canvas id="overlay" aria-hidden="true"></canvas>
+  <video id="cam" playsinline muted></video>
+
+  <header class="brand">
+    <div class="app-icon" aria-hidden="true"><span></span></div>
+    <div class="brand-name">AIVision</div>
+  </header>
+
+  <aside id="panel" class="panel material">
+    <button id="panelToggle" class="panel-toggle" aria-expanded="false" aria-controls="panel">
+      <span class="pt-title">Details</span>
+      <svg class="chev"><use href="#i-chev"/></svg>
+    </button>
+
+    <section class="now">
+      <h1 id="name">Turtle Tower</h1>
+      <p id="fact" class="fact"></p>
+    </section>
+
+    <section class="group">
+      <div class="row">
+        <span class="k">Scene</span><span id="statePill" class="pill" data-state="idle">idle</span>
+      </div>
+      <div class="row">
+        <span class="k">Hand</span><span id="posePill" class="pill pose">no hand</span>
+      </div>
+      <div class="row sensitivity">
+        <label class="k" for="gestureSensitivity">Gesture sensitivity</label>
+        <select id="gestureSensitivity" aria-describedby="gestureSensitivityHint">
+          <option value="standard" selected>Standard</option>
+          <option value="forgiving">More forgiving</option>
+        </select>
+      </div>
+      <div class="meter">
+        <div class="meter-head"><span class="k">Hand openness</span><b id="openPct">0%</b></div>
+        <div class="bar"><i id="openBar"></i></div>
+      </div>
+      <div id="explodeBox" class="meter explode" hidden>
+        <div class="meter-head"><span class="k">Exploded view</span><b id="explodePct">0%</b></div>
+        <input id="explodeSlider" type="range" min="0" max="100" value="0" aria-label="Exploded view amount">
+      </div>
+    </section>
+    <p id="gestureSensitivityHint" class="footnote">“More forgiving” helps recognize less distinct hand poses.</p>
+
+    <section class="buttons">
+      <button id="bSnap" title="Snap (Space)"><svg><use href="#i-snap"/></svg><span>Snap</span></button>
+      <button id="bForm" title="Form (F)"><svg><use href="#i-form"/></svg><span>Form</span></button>
+      <button id="bOpen" title="Release (O)"><svg><use href="#i-burst"/></svg><span>Release</span></button>
+      <button id="bNext" title="Next (V / →)"><svg><use href="#i-next"/></svg><span>Next</span></button>
+    </section>
+
+    <details class="disclosure" open>
+      <summary><span class="k">Gestures</span><svg class="chev"><use href="#i-chev"/></svg></summary>
+      <ul id="guide" class="guide"></ul>
+    </details>
+
+  </aside>
+
+  <div id="bigTitle" class="big-title"><div class="t"></div><div class="s"></div></div>
+
+  <nav id="catalog" class="catalog" aria-label="Models">
+    <div id="catMenu" class="picker-menu material" hidden>
+      <div id="catTabs" class="tabs" role="tablist"></div>
+      <div id="catChips" class="chips" role="listbox" aria-label="Models in this category"></div>
+      <div class="picker-foot">
+        <button id="objAdd" class="add-obj"><svg><use href="#i-plus"/></svg>Add your own object</button>
+        <span class="hint">drop a <code>.json</code> file anywhere · <a href="https://github.com/trojrobert/takeapart/blob/main/docs/models.md" target="_blank" rel="noreferrer">how to write one</a></span>
+        <input id="objFile" type="file" accept=".json,application/json" multiple hidden>
+      </div>
+      <div id="objMsg" class="obj-msg" hidden role="alert"></div>
+    </div>
+    <button id="catToggle" class="picker material" aria-haspopup="true" aria-expanded="false" aria-controls="catMenu" title="Browse models (B)">
+      <i class="swatch"></i>
+      <span class="pname">Models</span>
+      <span class="pcount"></span>
+      <svg class="chev"><use href="#i-chev"/></svg>
+    </button>
+  </nav>
+
+  <section id="partCard" class="part-card material" hidden aria-live="polite">
+    <div class="phead"><i class="swatch"></i><span class="pname"></span><button id="partClose" class="x" aria-label="Close" title="Close (Esc)"><svg><use href="#i-x"/></svg></button></div>
+    <div class="pinfo"></div>
+    <div class="pmodel"></div>
+    <div class="pactions">
+      <button id="partPull"><svg><use href="#i-pull"/></svg>Pull out</button>
+      <button id="partSpeak"><svg><use href="#i-speaker"/></svg>Read aloud</button>
+    </div>
+    <div class="phint">Point ☝ at another part · pinch 🤏 to pull this one out</div>
+  </section>
+
+  <section id="quiz" class="quiz material" hidden aria-live="polite">
+    <div class="q"></div><div class="qs"></div><div class="qf"></div>
+    <button id="quizStop" class="x" aria-label="Stop quiz" title="Stop quiz (Q)"><svg><use href="#i-x"/></svg></button>
+  </section>
+
+  <div class="top-right">
+    <div class="toolbar material" role="toolbar" aria-label="Tools">
+      <div class="tgroup">
+        <button id="bCam" class="icon" aria-label="Camera" data-tip="Camera · C"><svg><use href="#i-cam"/></svg></button>
+        <button id="bDemo" class="icon" aria-label="Play demo" data-tip="Demo · D"><svg><use href="#i-play"/></svg></button>
+      </div>
+      <div class="tgroup">
+        <button id="bLabels" class="icon on" aria-label="Part labels" data-tip="Labels · L"><svg><use href="#i-tag"/></svg></button>
+        <button id="bRotate" class="icon on" aria-label="Auto-rotate" data-tip="Auto-rotate · R"><svg><use href="#i-rotate"/></svg></button>
+        <button id="bHandRot" class="icon on" aria-label="Hand rotation" data-tip="Hand rotation · G"><svg><use href="#i-hand"/></svg></button>
+        <button id="bCut" class="icon" aria-label="Cut-away" data-tip="Cut-away · X"><svg><use href="#i-cut"/></svg></button>
+      </div>
+      <div class="tgroup">
+        <button id="bQuiz" class="icon" aria-label="Quiz" data-tip="Quiz · Q"><svg><use href="#i-quiz"/></svg></button>
+        <button id="bVoice" class="icon" aria-label="Voice" data-tip="Voice · M"><svg><use href="#i-mic"/></svg></button>
+        <button id="bRec" class="icon rec-btn" aria-label="Record video" data-tip="Record · K"><svg><use href="#i-rec"/></svg></button>
+      </div>
+      <div class="tgroup">
+        <button id="bHelp" class="icon" aria-label="Help" data-tip="Help · H"><svg><use href="#i-help"/></svg></button>
+      </div>
+    </div>
+    <div id="stats" class="stats"></div>
+  </div>
+
+  <div id="help" class="help material" hidden role="dialog" aria-label="Controls">
+    <div class="help-head">
+      <h2>Controls</h2>
+      <button id="helpClose" class="x" aria-label="Close" title="Close (H)"><svg><use href="#i-x"/></svg></button>
+    </div>
+    <table>
+      <tr><td><kbd>Space</kbd></td><td>Snap — summon / dissolve</td></tr>
+      <tr><td><kbd>F</kbd> <kbd>O</kbd></td><td>Fist (form) / Open hand (release)</td></tr>
+      <tr><td><kbd>V</kbd> <kbd>→</kbd> <kbd>←</kbd></td><td>Next / previous model</td></tr>
+      <tr><td><kbd>B</kbd></td><td>Browse all models (the picker at the bottom)</td></tr>
+      <tr><td><kbd>E</kbd> <kbd>↑</kbd> <kbd>↓</kbd></td><td>Exploded view (also mouse wheel)</td></tr>
+      <tr><td>Twist hand</td><td>Rotate the model, raise / lower to tilt · <kbd>G</kbd> on/off</td></tr>
+      <tr><td>☝ Point · 🤏 Pinch</td><td>Pick a part (or click it) · pull it out</td></tr>
+      <tr><td>🙌 Two hands</td><td>Zoom (also <kbd>+</kbd> <kbd>-</kbd> <kbd>0</kbd>, ctrl + wheel)</td></tr>
+      <tr><td><kbd>X</kbd> <kbd>,</kbd> <kbd>.</kbd></td><td>Cut-away slice (move hand / mouse)</td></tr>
+      <tr><td><kbd>Q</kbd> <kbd>M</kbd> <kbd>K</kbd> <kbd>I</kbd></td><td>Quiz · voice · record video · describe part</td></tr>
+      <tr><td>Drag</td><td>Rotate the model</td></tr>
+      <tr><td><kbd>R</kbd> <kbd>L</kbd> <kbd>T</kbd></td><td>Auto-rotate · labels · trails</td></tr>
+      <tr><td><kbd>S</kbd></td><td>Solid view (prototype): lit, occluding surface instead of a glowing cloud</td></tr>
+      <tr><td><kbd>C</kbd> <kbd>D</kbd> <kbd>H</kbd></td><td>Camera · demo · this help</td></tr>
+    </table>
+  </div>
+
+  <div id="dropZone" class="drop-zone" hidden aria-hidden="true"><div class="drop-card">Drop a <code>.json</code> object to add it</div></div>
+  <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+  <div id="start" class="start">
+    <div class="start-card material">
+      <div class="app-icon big" aria-hidden="true"><span></span></div>
+      <h1>Welcome to AI Vision</h1>
+      <p class="lede">Landmarks, the human body, engines and machines made of a quarter-million particles of light, controlled by your hand.</p>
+      <ul class="features">
+        <li><span class="fi" style="--c:#ffd60a">🫰</span><div><b>Snap to summon</b><span>Snap your fingers and the particles appear. Make a fist to form the model.</span></div></li>
+        <li><span class="fi" style="--c:#ff453a">✋</span><div><b>Open to explore</b><span>Open your hand to explode organs and engines into every named part.</span></div></li>
+        <li><span class="fi" style="--c:#30d158">☝️</span><div><b>Point to learn</b><span>Point at a part to see what it does. Pinch to pull it out.</span></div></li>
+        <li><span class="fi" style="--c:#0a84ff">🙌</span><div><b>Twist, tilt and zoom</b><span>Turn your hand to rotate the model. Use two hands to zoom. Show ✌ for the next model.</span></div></li>
+      </ul>
+      <div class="start-buttons">
+        <button id="bStartCam" class="primary">Start with Camera</button>
+        <button id="bStartNoCam" class="link">Continue without camera</button>
+      </div>
+      <p class="privacy">Hand tracking runs on this device. Video never leaves your computer.</p>
+      <p id="startMsg" class="start-msg"></p>
+    </div>
+  </div>
+
+  <script type="module" src="src/app.js"></script>
+</body>
+</html>
